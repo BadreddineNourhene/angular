@@ -1,11 +1,10 @@
-# Use the base Nginx image
-FROM nginx:alpine
-
-# Remove the default Nginx static files
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy the Angular app build output to the Nginx web root
-COPY dist/* /usr/share/nginx/html/
-
-# Expose the default port for an Angular app (usually 80)
-EXPOSE 4200
+FROM node:16.16-alpine AS build
+WORKDIR /dist/src/app
+RUN npm cache clean --force
+COPY . .
+RUN npm install --force
+RUN npm run build --prod
+FROM nginx:latest AS ngi
+COPY --from=build /dist/src/app/dist/crudtuto-Front /usr/share/nginx/html
+COPY /nginx.config  /etc/nginx/conf.d/default.conf
+EXPOSE 80
