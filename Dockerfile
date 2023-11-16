@@ -8,6 +8,6 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY dist/ /usr/share/nginx/html/
 
 # Expose the default port for an Angular app (usually 80)
-EXPOSE 4200
+EXPOSE 80
 
 
